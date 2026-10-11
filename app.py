@@ -20,7 +20,7 @@ if st.button("Review My Code"):
     else:
         try:
             genai.configure(api_key=api_key)
-            model = genai.GenerativeModel("gemini-pro")
+            model = genai.GenerativeModel("gemini-1.5-flash")
             
             prompt = f"""
             You are an expert AI code reviewer. Please review the following code:
