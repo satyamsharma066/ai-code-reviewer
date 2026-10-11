@@ -6,11 +6,11 @@ st.title("💻 AI Code Reviewer & Bug Fixer")
 st.markdown("Paste your Python, C++, or JS code below. The AI will find bugs, fix errors, and suggest improvements.")
 
 st.sidebar.header("Configuration")
-st.sidebar.markdown("Is app ko chalane ke liye ek Free Google Gemini API Key chahiye.")
+st.sidebar.markdown("Please enter your Free Google Gemini API Key to run this app.")
 api_key = st.sidebar.text_input("Enter your Gemini API Key here:", type="password")
 st.sidebar.markdown("*(Get your free key from [Google AI Studio](https://aistudio.google.com/app/apikey))*")
 
-code_input = st.text_area("Apna code yahan paste karo:", height=300)
+code_input = st.text_area("Paste your code here:", height=300)
 
 if st.button("Review My Code"):
     if not api_key:
@@ -22,15 +22,21 @@ if st.button("Review My Code"):
             genai.configure(api_key=api_key)
             model = genai.GenerativeModel("gemini-1.5-flash")
             
-            prompt = f"You are an expert Code Reviewer. Analyze the following code carefully.\n1. Identify any bugs and syntax errors.\n2. Suggest better ways to write it (clean code / optimization).\n3. Provide the final corrected code.\n\nHere is the code to review:\n{code_input}"
+            prompt = f"""
+            You are an expert AI code reviewer. Please review the following code:
+            1. Identify any bugs or errors.
+            2. Suggest improvements for better performance or readability.
+            3. Provide the corrected/improved version of the code.
             
-            with st.spinner("AI tumhara code check kar raha hai... Please wait."):
+            Code:
+            {code_input}
+            """
+            
+            with st.spinner("Analyzing code..."):
                 response = model.generate_content(prompt)
                 
-            st.success("Analysis Complete!")
-            st.markdown("### Output:")
-            st.markdown("---")
+            st.subheader("🤖 AI Review & Feedback:")
             st.markdown(response.text)
             
         except Exception as e:
-            st.error(f"❌ Kuch error aa gaya. API key check karo. Error: {e}")
+            st.error(f"❌ An error occurred: {e}")
